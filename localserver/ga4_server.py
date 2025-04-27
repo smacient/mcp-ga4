@@ -1,5 +1,4 @@
-from typing import Any
-
+import os
 # import httpx
 # import mcp
 from mcp.server.fastmcp import FastMCP
@@ -13,9 +12,11 @@ from actions.run_report_with_ordering import GoogleAnalyticsReportWithOrdering
 
 # initialize authentication
 from google.oauth2 import service_account
+
+credentials_file = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 credentials = service_account.Credentials.from_service_account_file(
-    "C:\\Users\\anibr\\Downloads\\credentials.json"
-)
+    credentials_file
+    )
 
 # Initialize FastMCP server
 mcp = FastMCP(
@@ -25,9 +26,6 @@ mcp = FastMCP(
     timeout=30
     )
 
-
-# property_id = "256742771"
-# account_id = "140900748"
 
 @mcp.tool()
 def get_report(
