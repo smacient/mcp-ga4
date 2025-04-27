@@ -1,0 +1,13 @@
+[project]
+name = "mcp-ga4"
+version = "0.1.0"
+description = "mcp server for google analytics 4"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "google-analytics-admin>=0.24.0",
+    "google-analytics-data>=0.18.18",
+    "mcp-use>=1.2.7",
+    "mcp[cli]>=1.6.0",
+    "pandas>=2.2.3",
+]
