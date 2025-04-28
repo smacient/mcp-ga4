@@ -20,7 +20,7 @@ credentials = service_account.Credentials.from_service_account_file(
 
 # Initialize FastMCP server
 mcp = FastMCP(
-    name="google analytics 4",
+    name="google-analytics-4",
     host="127.0.0.1",
     port=5000,
     timeout=30

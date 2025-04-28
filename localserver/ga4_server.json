@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "google analytics 4": {
+    "Google Analytics 4": {
       "command": "uv",
       "args": [
         "run",
@@ -8,11 +8,13 @@
         "mcp[cli]",
         "mcp",
         "run",
-        "C:\\Users\\anibr\\Desktop\\upwork\\mcp_ga4\\localserver\\ga4_server.py"
+        "*"
       ],
       "env": {
-        "VIRTUAL_ENV": "C:\\Users\\anibr\\Desktop\\upwork\\mcp_ga4\\.venv",
-        "PATH": "C:\\Users\\anibr\\Desktop\\upwork\\mcp_ga4\\.venv\\Scripts;${PATH}",
+        "VIRTUAL_ENV": "*",
+        "PATH": "*\\Scripts;${PATH}",
+        "GOOGLE_APPLICATION_CREDENTIALS": "*"
       }
+    }
   }
 }
