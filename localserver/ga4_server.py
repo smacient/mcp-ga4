@@ -12,6 +12,9 @@ from actions.run_report_with_ordering import GoogleAnalyticsReportWithOrdering
 
 # initialize authentication
 from google.oauth2 import service_account
+from dotenv import load_dotenv
+
+load_dotenv()
 
 credentials_file = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 credentials = service_account.Credentials.from_service_account_file(
@@ -20,7 +23,7 @@ credentials = service_account.Credentials.from_service_account_file(
 
 # Initialize FastMCP server
 mcp = FastMCP(
-    name="google-analytics-4",
+    name="Google Analytics 4",
     host="127.0.0.1",
     port=5000,
     timeout=30
