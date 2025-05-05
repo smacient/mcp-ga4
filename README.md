@@ -24,35 +24,11 @@ This is a Model Context Protocol (MCP) server with tools to retrieve information
 
 4.  ## Setup environment
 - set up your goggle account credentials and download the json file. rename it credentials.json
-- create a `.env` file inside the localserver folder
+- create a `.env` file inside the `localserver` folder
 - add the correct path to your google credentials in the env file
+
     `GOOGLE_APPLICATION_CREDENTIALS="C:\\Users\\path to\\credentials.json"`
-- configure the `ga4_server.json` inside the `localserver`. add the paths needed. remove `path to` and add the correct path
-```JSON
-{
-  "mcpServers": {
-    "Google Analytics 4": {
-      "command": "uv",
-      "args": [
-        "run",
-        "--with",
-        "mcp[cli]",
-        "mcp",
-        "run",
-        "C:\\Users\\`path to`\\mcp_ga4\\localserver\\ga4_server.py"
-      ],
-      "env": {
-        "VIRTUAL_ENV": "C:\\Users\\`path to`\\mcp_ga4\\.venv",
-        "PATH": "C:\\Users\\`path to`\\mcp_ga4\\.venv\\Scripts;${PATH}",
-        "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Users\\path to\\credentials.json"
-      }
-    }
-  }
-}
 
-```
-
-- This configuration is only need if you want to use the openai_cleint. Claude desktop users will have this added to the claude config file during installation
 
 ## Features
 
@@ -75,12 +51,26 @@ To run the server with the MCP Inspector for development:
 uv run mcp dev localserver/ga4_server.py
 ```
 
-To run the with openai client:
+To run the with openai client: 
+
+update the .env
+  ```ENV
+    GOOGLE_APPLICATION_CREDENTIALS="C:\\Users\\`path to`\\credentials.json"
+    OPENAI_API_KEY="add your openai api key"
+  ```
+run command
 ```bash
 uv run mcp localserver/openai_client.py
 ```
 
-To run the with gemini client:
+To run the with gemini client: 
+
+update the .env
+  ```ENV
+    GOOGLE_APPLICATION_CREDENTIALS="C:\\Users\\`path to`\\credentials.json"
+    GEMINI_API_KEY="add your gemini api key"
+  ```
+run command
 ```bash
 uv run mcp localserver/gemini_client.py
 ```
@@ -95,8 +85,33 @@ Set up the configuration properly
 - go to claude desktop.
 - click settings, go to developer and click on edit config
 - open the config file with sublime text
-- add the env section as the one shown above.
+- add the env section as the one shown below.
+- edit the claude configuration file to look like the one below. add the paths needed. remove `path to` and add the correct path
 
- Restart claude and your tools will be visible on the chat interface.
+```JSON
+{
+  "mcpServers": {
+    "Google Analytics 4": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "mcp[cli]",
+        "mcp",
+        "run",
+        "C:\\Users\\`path to`\\Gemini-Agent-MCP\\src\\gemini_server_sample.py"
+      ],
+      "env": {
+        "VIRTUAL_ENV": "C:\\Users\\`path to`\\Gemini-Agent-MCPmcp_ga4\\.venv",
+        "PATH": "C:\\Users\\`path to`\\Gemini-Agent-MCP\\.venv\\Scripts;${PATH}",
+        "GOOGLE_APPLICATION_CREDENTIALS": "C:\\Users\\`path to`\\credentials.json"
+      }
+    }
+  }
+}
+
+```
+
+ End claude in task manager and restart it. Your tools will be visible on the chat interface.
 
  Ask Claude to get your GA4 information and accept the popup permit to use the tools required.

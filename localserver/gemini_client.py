@@ -56,7 +56,7 @@ if __name__ == "__main__":
     asyncio.run(test())
 
     asyncio.run(main())
-    #  uv run localserver/gemini_client.py
+    # uv run localserver/gemini_client.py
     # acc 140900748
     # prop 256742771
 

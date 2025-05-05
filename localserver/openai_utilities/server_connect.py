@@ -94,7 +94,7 @@ class MCPClient:
                         # Process result
                         if "output" in result:
                             formatted_output = result["output"]
-                            print(f"\nGemini: \u001b[32m{formatted_output}\u001b[0m")
+                            print(f"\nOpenai: \u001b[32m{formatted_output}\u001b[0m")
                             
                             # Add to chat history
                             chat_history.append(HumanMessage(content=query))

@@ -54,5 +54,5 @@ if __name__ == "__main__":
 
     asyncio.run(main())
 
-    #  uv run localserver/openai_new.py localserver/ga4_server.py
+    #  uv run localserver/openai_client.py
     # 256742771
