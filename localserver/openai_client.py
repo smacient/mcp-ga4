@@ -1,84 +1,58 @@
-import asyncio
-from langchain_openai import ChatOpenAI  # Import OpenAI integration
-from mcp_use import MCPAgent, MCPClient
 import os
+import asyncio
+import logging
+import traceback
 
-from dotenv import load_dotenv
-# Load environment variables from .env
-load_dotenv()
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-# Ensure OpenAI key is loaded
-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+from openai_utilities.server_connect import MCPClient
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-async def run_memory_chat():
-    """Run a chat using MCPAgent's built-in conversation memory."""
-    # Load environment variables for API keys
-    # load_dotenv()
-    # os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")  # Ensure OpenAI key is loaded
+async def test():
+    print("Async event loop test passed!")
 
-    # Config file path - change this to your config file if applicable
-    config_file = "localserver/ga4_server.json"
 
-    print(f"Using configuration file: {config_file}")
+async def handle_request_with_retry(client, retries=3, delay=5):
+    server_file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "ga4_server.py"))
 
-    # Ensure the file exists before proceeding
-    if not os.path.exists(config_file):
-        raise FileNotFoundError(f"Configuration file not found at: {config_file}")
+    if not os.path.exists(server_file_path):
+        logger.error(f"Server file not found at {server_file_path}")
+        return
 
-    # config_file = os.getenv("GA4_CONFIG_PATH")
+    for attempt in range(retries):
+        try:
+            logger.info(f"Attempt {attempt + 1} to connect to server: {server_file_path}")
+            await client.connect_to_server(server_file_path)
+            logger.info("Connected successfully!")
+            await client.run_agent()
+            return
+        except Exception as e:
+            if "503" in str(e):
+                logger.warning(f"Server error: {e}. Retrying in {delay * (2 ** attempt)} seconds...")
+                await asyncio.sleep(delay * (2 ** attempt))  # Exponential backoff
+            else:
+                logger.error(f"Critical error: {e}")
+                raise
 
-    print("Initializing chat...")
+    logger.error("All retry attempts failed. Please try again later.")
 
-    # Create MCP client and agent with memory enabled
-    client = MCPClient.from_config_file(config_file)
-    llm = ChatOpenAI(model="gpt-4", temperature=0.7)  # Use OpenAI's GPT model
 
-    # Create agent with memory_enabled=True
-    agent = MCPAgent(
-        llm=llm,
-        client=client,
-        max_steps=15,
-        memory_enabled=True,  # Enable built-in conversation memory
-    )
-
+async def main():
+    logger.info("Starting MCP client...")
+    client = MCPClient()
     try:
-        # Main chat loop
-        while True:
-            # print guide
-            print("\n===== Interactive MCP Chat =====")
-            print("Type 'exit' or 'quit' to end the conversation")
-            print("Type 'clear' to clear conversation history")
-            print("==================================\n")
-            # Get user input
-            user_input = input("\nYou: ")
+        await handle_request_with_retry(client)
+    except Exception as e:
+        logger.error(f"Unhandled error: {e}")
+        traceback.print_exc()
 
-            # Check for exit command
-            if user_input.lower() in ["exit", "quit"]:
-                print("Ending conversation...")
-                break
-
-            # Check for clear history command
-            if user_input.lower() == "clear":
-                agent.clear_conversation_history()
-                print("Conversation history cleared.")
-                continue
-
-            # Get response from agent
-            print("\nAssistant: ", end="", flush=True)
-
-            try:
-                # Run the agent with the user input (memory handling is automatic)
-                response = await agent.run(user_input)
-                print(response)
-
-            except Exception as e:
-                print(f"\nError: {e}")
-
-    finally:
-        # Clean up
-        if client and client.sessions:
-            await client.close_all_sessions()
 
 if __name__ == "__main__":
-    asyncio.run(run_memory_chat())
+    # run the function with asyncio event loop
+    asyncio.run(test())
+
+    asyncio.run(main())
+
+    #  uv run localserver/openai_new.py localserver/ga4_server.py
+    # 256742771

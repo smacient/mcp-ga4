@@ -5,13 +5,18 @@ description = "mcp server for google analytics 4"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "aioconsole>=0.8.1",
     "fastembed>=0.6.1",
     "google-analytics-admin>=0.24.0",
     "google-analytics-data>=0.18.18",
-    "langchain-groq>=0.3.2",
+    "google-genai>=1.12.1",
+    "langchain>=0.3.24",
+    "langchain-mcp-adapters>=0.0.9",
     "langchain-openai>=0.3.14",
+    "langgraph>=0.4.1",
     "mcp-use>=1.2.7",
     "mcp[cli]>=1.6.0",
     "nest-asyncio>=1.6.0",
     "pandas>=2.2.3",
+    "python-dotenv>=1.1.0",
 ]

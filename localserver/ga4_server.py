@@ -1,5 +1,4 @@
 import os
-# import httpx
 # import mcp
 from mcp.server.fastmcp import FastMCP
 
@@ -9,6 +8,9 @@ from actions.run_admin_services import GoogleAnalyticsAdminServices
 from actions.run_realtime_report import GoogleAnalyticsRealTimeReport
 from actions.run_comparative_report import GoogleAnalyticsComparativeReport
 from actions.run_report_with_ordering import GoogleAnalyticsReportWithOrdering
+
+# import typings
+from typing import List, Optional
 
 # initialize authentication
 from google.oauth2 import service_account
@@ -33,8 +35,8 @@ mcp = FastMCP(
 @mcp.tool()
 def get_report(
     property_id: str,
-    dimensions: list,
-    metrics: list,
+    dimensions: List[str],
+    metrics: List[str],
     start_date: str,
     end_date: str,
 ) -> str:
@@ -62,8 +64,8 @@ def get_report(
 @mcp.tool()
 def get_realtime_report(
     property_id: str,
-    metrics: list,
-    dimensions: list = None
+    metrics: List[str],
+    dimensions: Optional[List[str]] = None
 ) -> str:
     """Returns real-time data from Google Analytics 4.   
     Args:
@@ -71,8 +73,10 @@ def get_realtime_report(
         metrics: Metrics attributes for real-time data. Examples: "activeUsers", "screenPageViews"
         dimensions: Optional dimension attributes. Examples: "city", "browser"
     """
+
     real_time_report = GoogleAnalyticsRealTimeReport(credentials)
     return real_time_report.run_realtime_report(property_id, metrics, dimensions)
+
 
 @mcp.tool()
 def compare_period_metrics(
@@ -81,8 +85,8 @@ def compare_period_metrics(
     period_1_end_date: str,
     period_2_start_date: str,
     period_2_end_date: str,
-    metrics: list,
-    dimensions: list = [],
+    metrics: List[str],
+    dimensions: Optional[List[str]] = None,
 ) -> str:
     """Compare Google Analytics metrics between two time periods.    
     Args:
@@ -107,12 +111,12 @@ def compare_period_metrics(
 
 @mcp.tool()
 def get_report_with_order(
-        property_id,
-        metrics,
-        dimensions,
-        start_date,
-        end_date,
-        orderby,
+        property_id: str,
+        metrics: List[str],
+        dimensions: List[str],
+        start_date: str,
+        end_date: str,
+        orderby: str,
 ) -> str:
     """Runs a report of active users grouped by three dimensions, ordered by
         the indicated metric in descending order.
@@ -136,7 +140,7 @@ def get_report_with_order(
 
 
 @mcp.tool()
-def list_all_properties(account_id: str, transport: str) -> list:
+def list_all_properties(account_id: str, transport: str = None) -> list:
     """
         Lists all Google Analytics properties under the specified parent account
         that are available to the current user.
@@ -153,7 +157,7 @@ def list_all_properties(account_id: str, transport: str) -> list:
     return admin.list_properties(account_id, transport)
 
 @mcp.tool()
-def list_all_accounts(self, transport: str = None) -> list:
+def list_all_accounts(transport: str = None) -> list:
     """
         Lists the available Google Analytics accounts.
 
@@ -168,18 +172,4 @@ def list_all_accounts(self, transport: str = None) -> list:
 
 
 if __name__ == "__main__":
-    ga4_server()
-    # admin = GoogleAnalyticsAdminServices()
-    # admin.list_properties(account_id)
-    # admin.list_accounts()
-    # reportga = GoogleAnalyticsGA4Report(property_id)
-    # reportga.run_report(start_date="2020-03-31", end_date="today", metrics="activeUsers")
-    # reportga.run_report("2020-03-31", "today", metrics="activeUsers")
-    # report = GoogleAnalyticsReport()
-    # report.run_report(property_id)
-    # realtimerequest = GoogleAnalyticsRealTimeReport()
-    # realtimerequest.run_realtime_report(property_id)
-    # orderedreport = GoogleAnalyticsReportWithOrdering()
-    # orderedreport.run_report_with_ordering(property_id)
-    # comparereport = GoogleAnalyticsComparativeReport()
-    # comparereport.run_report_with_named_date_ranges(property_id)
+    mcp.run(transport="stdio")
