@@ -138,4 +138,4 @@ celerybeat.pid
 # Environments
 .env
 .venv
-.jsonl
+ga4_app.log.jsonl

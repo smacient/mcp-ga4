@@ -5,7 +5,6 @@ import sys
 sys.path.append("localserver")
 
 
-
 def main():
     setup_logging()
     logger.debug("debug message", extra={"x": "hello"})

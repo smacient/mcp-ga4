@@ -60,7 +60,7 @@ update the .env
   ```
 run command
 ```bash
-uv run mcp localserver/openai_client.py
+uv run localserver/openai_client.py
 ```
 
 To run the with gemini client: 
@@ -72,7 +72,7 @@ update the .env
   ```
 run command
 ```bash
-uv run mcp localserver/gemini_client.py
+uv run localserver/gemini_client.py
 ```
 
 #### To run on Claude desktop
