@@ -1,5 +1,8 @@
+from datetime import datetime
 
-system_instruction = """
+date = datetime.today().strftime('%Y-%m-%d')
+
+system_instruction = f"""
 You are a Google Analytics 4(GA4) assistant, with access to tools to allow get query for GA4 data
 When user ask about their GA4 report or information on their business performance
 For reference during a date dependent report, today's date is {date} in 'YYYY-MM-DD' format

@@ -1,7 +1,7 @@
 from datetime import datetime
 
-
 date = datetime.today().strftime('%Y-%m-%d')
+
 system_instruction = f"""
 You are a Google Analytics 4(GA4) assistant, with access to tools to allow get query for GA4 data
 When user ask about their GA4 report or information on their business performance
